@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "bundle.css",
+  "sources": [
+    "../src/login.html"
+  ],
+  "sourcesContent": [
+    "<h1>Atlanta Beltline Project</h1>\n\n<form name=\"myForm\" id=\"loginForm\" on:submit|preventDefault=\"{login}\">\n  {#if invalidLogin}\n  <p class=\"error\">Sorry, but your email or password were incorrect :(</p>\n  {/if}\n  <table>\n    <tr>\n      <td>Email:</td>\n      <td><input type=\"text\" name=\"email\" id=\"email\" /></td>\n    </tr>\n    <tr>\n      <td>Password:</td>\n      <td><input type=\"password\" name=\"password\" id=\"password\" /></td>\n    </tr>\n  </table>\n\n  <button class=\"general-button\" id=\"login\" type=\"submit\">Login</button>\n  <button class=\"general-button\" id=\"register\" onclick=\"register()\">\n    Register\n  </button>\n</form>\n\n<style>\n  .error {\n    background: hsl(0, 100%, 87%);\n    color: hsl(0, 90%, 30%);\n    padding: 0.3rem 0.6rem;\n    margin-bottom: 1rem;\n    border-radius: 0.3rem;\n    display: inline-block;\n  }\n</style>\n\n<script>\n  import fetch from './fetch'\n  import { changePage, updateUser } from './store'\n  let invalidLogin = false\n\n  const login = async () => {\n    const email = document.getElementById('email').value\n    const password = document.getElementById('password').value\n    const user = await fetch('/login', {\n      email: email,\n      password: password,\n    })\n    if (user.failed) {\n      invalidLogin = true\n    } else {\n      updateUser(user)\n      changePage('/')\n    }\n  }\n</script>\n"
+  ],
+  "names": [],
+  "mappings": "AAwBE,MAAM,eAAC,CAAC,AACN,UAAU,CAAE,IAAI,CAAC,CAAC,CAAC,IAAI,CAAC,CAAC,GAAG,CAAC,CAC7B,KAAK,CAAE,IAAI,CAAC,CAAC,CAAC,GAAG,CAAC,CAAC,GAAG,CAAC,CACvB,OAAO,CAAE,MAAM,CAAC,MAAM,CACtB,aAAa,CAAE,IAAI,CACnB,aAAa,CAAE,MAAM,CACrB,OAAO,CAAE,YAAY,AACvB,CAAC"
+}

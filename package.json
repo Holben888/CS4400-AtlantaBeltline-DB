@@ -1,0 +1,16 @@
+{
+  "name": "Atlanta-SVELTEline",
+  "version": "1.0.0",
+  "description": "Phase 3 implementation for Atlanta Beltline project",
+  "main": "app.js",
+  "scripts": {
+    "install-frontend": "npm install --cwd client",
+    "install-backend": "npm install --cwd server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aberchenko/CS-4400-Website.git"
+  },
+  "author": "Benjamin Holmes, Amiel Berchenko, William Collins, Lauren Chen, Linsey Chen",
+  "license": "ISC"
+}

@@ -1,0 +1,19 @@
+<h1>Home!</h1>
+<p>{userRole}</p>
+
+<script>
+  import { onMount } from 'svelte'
+  import { changePage, userStore } from './store'
+
+  let userRole = 'user'
+
+  onMount(() => {
+    const user = $userStore
+
+    if (!user || !user.Username) {
+      changePage('/login')
+    }
+
+    userRole = user.Role
+  })
+</script>

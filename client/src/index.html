@@ -1,0 +1,32 @@
+<svelte:component this="{currPageComponent}" />
+
+<script>
+  import { onMount, onDestroy } from 'svelte'
+  import Login from './login.html'
+  import Dashboard from './dashboard.html'
+  import { pageStore } from './store'
+
+  let currPageComponent = Dashboard
+
+  const pages = [
+    {
+      path: '/',
+      component: Dashboard,
+    },
+    {
+      path: '/login',
+      component: Login,
+    },
+  ]
+
+  onMount(() => pageStore.set(location.pathname))
+
+  const unsubscribe = pageStore.subscribe(path => {
+    const matchingPage = pages.find(page => page.path === path)
+    if (matchingPage) {
+      currPageComponent = matchingPage.component
+    }
+  })
+
+  onDestroy(() => unsubscribe())
+</script>

@@ -1,0 +1,54 @@
+<h1>Atlanta Beltline Project</h1>
+
+<form name="myForm" id="loginForm" on:submit|preventDefault="{login}">
+  {#if invalidLogin}
+  <p class="error">Sorry, but your email or password were incorrect :(</p>
+  {/if}
+  <table>
+    <tr>
+      <td>Email:</td>
+      <td><input type="text" name="email" id="email" /></td>
+    </tr>
+    <tr>
+      <td>Password:</td>
+      <td><input type="password" name="password" id="password" /></td>
+    </tr>
+  </table>
+
+  <button class="general-button" id="login" type="submit">Login</button>
+  <button class="general-button" id="register" onclick="register()">
+    Register
+  </button>
+</form>
+
+<style>
+  .error {
+    background: hsl(0, 100%, 87%);
+    color: hsl(0, 90%, 30%);
+    padding: 0.3rem 0.6rem;
+    margin-bottom: 1rem;
+    border-radius: 0.3rem;
+    display: inline-block;
+  }
+</style>
+
+<script>
+  import fetch from './fetch'
+  import { changePage, updateUser } from './store'
+  let invalidLogin = false
+
+  const login = async () => {
+    const email = document.getElementById('email').value
+    const password = document.getElementById('password').value
+    const user = await fetch('/login', {
+      email: email,
+      password: password,
+    })
+    if (user.failed) {
+      invalidLogin = true
+    } else {
+      updateUser(user)
+      changePage('/')
+    }
+  }
+</script>

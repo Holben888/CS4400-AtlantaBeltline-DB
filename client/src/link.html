@@ -1,0 +1,13 @@
+<a href="{href}" on:click|preventDefault="{goToPage}"><slot></slot></a>
+
+<script>
+  import { pageStore } from './store'
+
+  export let href = '/'
+
+  const goToPage = () => {
+    console.log('something')
+    pageStore.set(href)
+    history.pushState({}, '', href)
+  }
+</script>
