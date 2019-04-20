@@ -24,6 +24,11 @@ const db = mysql.createConnection({
   database: 'Phase3AtlantaBeltline',
 })
 
+app.get('/', (req, res, err) => {
+  res.status(200)
+  res.send({ response: 'App is running!' })
+})
+
 db.connect()
 
 // To allow us to use "await" to grab the result

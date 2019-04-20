@@ -1,4 +1,8 @@
 {
+  "name": "Atlanta-SVELTEline-client",
+  "version": "1.0.0",
+  "description": "Phase 3 implementation for Atlanta Beltline project",
+  "main": "app.js",
   "dependencies": {
     "rollup": "^1.1.2",
     "rollup-plugin-livereload": "^1.0.0",

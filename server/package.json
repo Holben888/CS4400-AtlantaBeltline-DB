@@ -1,4 +1,8 @@
 {
+  "name": "Atlanta-SVELTEline-server",
+  "version": "1.0.0",
+  "description": "Phase 3 implementation for Atlanta Beltline project",
+  "main": "app.js",
   "scripts": {
     "dev": "npx nodemon --watch ./views --watch ./app.js app.js localhost 3001"
   },
