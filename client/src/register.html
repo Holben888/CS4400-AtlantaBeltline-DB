@@ -1,0 +1,160 @@
+<h1>Register Employee</h1>
+
+<form name="myForm">
+  <table>
+    <tr>
+      <td>First Name</td>
+      <td><input type="text" name="fname" /></td>
+      <td>Last Name</td>
+      <td><input type="text" name="lname" /></td>
+    </tr>
+    <tr>
+      <td>Username</td>
+      <td><input type="text" name="username" /></td>
+      <td>User Type</td>
+      <td>
+        <select name="type">
+          <option value="Manager">Manager</option>
+          <option value="Staff">Staff</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Password</td>
+      <td><input type="password" name="password1" /></td>
+      <td>Confirm Password</td>
+      <td><input type="password" name="password2" /></td>
+    </tr>
+    <tr>
+      <td>Phone</td>
+      <td><input type="text" name="phone" /></td>
+      <td>Address</td>
+      <td><input type="text" name="address" /></td>
+    </tr>
+    <tr>
+      <td>City</td>
+      <td><input type="text" name="city" /></td>
+      <td>State</td>
+      <td>
+        <select name="state">
+          {#each stateAbbreviations as state}
+          <option value="{state}">{state}</option>
+          {/each}
+        </select>
+      </td>
+      <td>Zipcode</td>
+      <td><input type="text" name="zipcode" /></td>
+    </tr>
+  </table>
+
+  <table id="email-table">
+    <tr>
+      <td>Email</td>
+      <td><input type="text" id="email" /></td>
+      <td>
+        <button class="table-button" type="button" onclick="addEmail()">
+          Add
+        </button>
+      </td>
+    </tr>
+  </table>
+</form>
+
+<button class="general-button" onclick="back()">Back</button>
+<button class="general-button" onclick="register()">Register</button>
+
+<script>
+  import { stateAbbreviations } from './addressHelpers'
+
+  var emails = []
+
+  function back() {
+    document.location.href = '2_Register_Navigation.html'
+  }
+
+  function register() {
+    var fname = document.forms['myForm']['fname'].value
+    var lname = document.forms['myForm']['lname'].value
+    var username = document.forms['myForm']['username'].value
+    var userType = document.forms['myForm']['type'].value
+    var password1 = document.forms['myForm']['password1'].value
+    var password2 = document.forms['myForm']['password2'].value
+    if (password1 != password2) {
+      alert('Passwords must match')
+      return
+    }
+    var phone = document.forms['myForm']['phone'].value
+    var address = document.forms['myForm']['address'].value
+    var city = document.forms['myForm']['city'].value
+    var state = document.forms['myForm']['state'].value
+    var zipcode = document.forms['myForm']['zipcode'].value
+    // emails are contained in the email array
+
+    //FIX ME
+    var added = true
+
+    if (!added) {
+      alert('Issue registering')
+    } else {
+      //document.location.href = "";
+    }
+  }
+
+  function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return re.test(String(email).toLowerCase())
+  }
+
+  function addEmail() {
+    var newEmail = document.getElementById('email').value
+    if (!validateEmail(newEmail)) {
+      alert('Invalid email')
+      return
+    }
+    emails.push(newEmail)
+    document.forms['myForm']['email'].value = ''
+
+    var emailTable = document.getElementById('email-table')
+    //var rows = emailTable.rows;
+    //var firstRow = rows[0];
+    //var cells = firstRow.cells;
+    var index = emailTable.rows.length - 1
+    var newRow = emailTable.insertRow(index)
+    var cell0 = newRow.insertCell(0)
+    var cell1 = newRow.insertCell(1)
+    var cell2 = newRow.insertCell(2)
+    cell0.innerHTML = index == 0 ? 'Email' : ''
+    cell1.innerHTML = "<p name='email" + index + "'>" + newEmail + '<p>'
+    cell2.innerHTML =
+      "<button class='table-button' type='button' onclick='removeEmail(" +
+      index +
+      ")'>Remove</button>"
+
+    if (index == 0) {
+      emailTable.rows[1].cells[0].innerHTML = ''
+    }
+
+    return false
+  }
+
+  function removeEmail(index) {
+    emails.splice(index, 1)
+
+    var emailTable = document.getElementById('email-table')
+    emailTable.deleteRow(index)
+
+    for (var i = 0; i < emailTable.rows.length - 1; i++) {
+      emailTable.rows[i].cells[2].innerHTML =
+        "<button class='table-button' type='button' onclick='removeEmail(" +
+        i +
+        ")'>Remove</button>"
+    }
+
+    if (index == 0) {
+      var cell0 = emailTable.rows[0].cells[0]
+      cell0.innerHTML = 'Email'
+    }
+
+    return false
+  }
+</script>

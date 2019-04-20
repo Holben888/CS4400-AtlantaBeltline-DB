@@ -1,9 +1,27 @@
-<svelte:component this="{currPageComponent}" />
+<main>
+  <div class="content-container">
+    <svelte:component this="{currPageComponent}" />
+  </div>
+</main>
+
+<style>
+  main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .content-container {
+    width: 100%;
+    max-width: 60rem;
+  }
+</style>
 
 <script>
   import { onMount, onDestroy } from 'svelte'
   import Login from './login.html'
   import Dashboard from './dashboard.html'
+  import AdminUserMngr from './admin/user-mngr.html'
+  import Register from './register.html'
   import { pageStore } from './store'
 
   let currPageComponent = Dashboard
@@ -16,6 +34,14 @@
     {
       path: '/login',
       component: Login,
+    },
+    {
+      path: '/admin-user-mngr',
+      component: AdminUserMngr,
+    },
+    {
+      path: '/register',
+      component: Register,
     },
   ]
 

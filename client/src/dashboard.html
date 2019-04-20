@@ -1,9 +1,11 @@
 <h1>Home!</h1>
 <p>{userRole}</p>
+<Link href="admin-user-mngr">Manager Users</Link>
 
 <script>
   import { onMount } from 'svelte'
   import { changePage, userStore } from './store'
+  import Link from './link.html'
 
   let userRole = 'user'
 
