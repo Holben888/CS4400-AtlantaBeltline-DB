@@ -3,7 +3,8 @@ import { writable } from 'svelte/store'
 export const pageStore = writable('/')
 export const userStore = writable({
   Username: localStorage.getItem('Username'),
-  Role: localStorage.getItem('Role'),
+  // Role: localStorage.getItem('Role'),
+  Role: 'Admin',
   Visitor: localStorage.getItem('Visitor'),
   Firstname: localStorage.getItem('Firstname'),
   Lastname: localStorage.getItem('Lastname'),

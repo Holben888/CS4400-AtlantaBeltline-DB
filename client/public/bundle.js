@@ -375,7 +375,8 @@ var App = (function () {
 	const pageStore = writable('/');
 	const userStore = writable({
 	  Username: localStorage.getItem('Username'),
-	  Role: localStorage.getItem('Role'),
+	  // Role: localStorage.getItem('Role'),
+	  Role: 'Admin',
 	  Visitor: localStorage.getItem('Visitor'),
 	  Firstname: localStorage.getItem('Firstname'),
 	  Lastname: localStorage.getItem('Lastname'),
@@ -1192,20 +1193,20 @@ var App = (function () {
 		}
 		});
 
-		var if_block0 = create_if_block_4(ctx);
+		var if_block0 = (ctx.userRole !== 'User') && create_if_block_4(ctx);
 
-		var if_block1 = create_if_block_3(ctx);
+		var if_block1 = (ctx.userRole === 'Admin') && create_if_block_3(ctx);
 
-		var if_block2 = (userRole === 'Staff') && create_if_block_2(ctx);
+		var if_block2 = (ctx.userRole === 'Staff') && create_if_block_2(ctx);
 
-		var if_block3 = (userRole === 'Manager') && create_if_block_1(ctx);
+		var if_block3 = (ctx.userRole === 'Manager') && create_if_block_1(ctx);
 
 		var if_block4 = (ctx.isVisitor) && create_if_block$1(ctx);
 
 		return {
 			c() {
 				h1 = createElement("h1");
-				text0 = createText(userRole);
+				text0 = createText(ctx.userRole);
 				text1 = createText(" Dashboard");
 				text2 = createText("\n");
 				p = createElement("p");
@@ -1262,11 +1263,15 @@ var App = (function () {
 			},
 
 			p(changed, ctx) {
+				if (!current || changed.userRole) {
+					setData(text0, ctx.userRole);
+				}
+
 				if (!current || changed.name) {
 					setData(text4, ctx.name);
 				}
 
-				{
+				if (ctx.userRole !== 'User') {
 					if (!if_block0) {
 						if_block0 = create_if_block_4(ctx);
 						if_block0.c();
@@ -1275,9 +1280,18 @@ var App = (function () {
 					} else {
 										if_block0.i(1);
 					}
+				} else if (if_block0) {
+					group_outros();
+					on_outro(() => {
+						if_block0.d(1);
+						if_block0 = null;
+					});
+
+					if_block0.o(1);
+					check_outros();
 				}
 
-				{
+				if (ctx.userRole === 'Admin') {
 					if (!if_block1) {
 						if_block1 = create_if_block_3(ctx);
 						if_block1.c();
@@ -1286,9 +1300,27 @@ var App = (function () {
 					} else {
 										if_block1.i(1);
 					}
+				} else if (if_block1) {
+					group_outros();
+					on_outro(() => {
+						if_block1.d(1);
+						if_block1 = null;
+					});
+
+					if_block1.o(1);
+					check_outros();
 				}
 
-				if (if_block2) {
+				if (ctx.userRole === 'Staff') {
+					if (!if_block2) {
+						if_block2 = create_if_block_2(ctx);
+						if_block2.c();
+						if_block2.i(1);
+						if_block2.m(div, text12);
+					} else {
+										if_block2.i(1);
+					}
+				} else if (if_block2) {
 					group_outros();
 					on_outro(() => {
 						if_block2.d(1);
@@ -1299,7 +1331,16 @@ var App = (function () {
 					check_outros();
 				}
 
-				if (if_block3) {
+				if (ctx.userRole === 'Manager') {
+					if (!if_block3) {
+						if_block3 = create_if_block_1(ctx);
+						if_block3.c();
+						if_block3.i(1);
+						if_block3.m(div, text13);
+					} else {
+										if_block3.i(1);
+					}
+				} else if (if_block3) {
 					group_outros();
 					on_outro(() => {
 						if_block3.d(1);
@@ -1379,12 +1420,11 @@ var App = (function () {
 		};
 	}
 
-	let userRole = 'Admin';
-
 	function instance$2($$self, $$props, $$invalidate) {
 		
 
 	  let name = '';
+	  let userRole = 'User';
 	  let isVisitor = false;
 
 	  onMount(() => {
@@ -1395,7 +1435,7 @@ var App = (function () {
 	    }
 
 	    name = user.Firstname + ' ' + user.Lastname; $$invalidate('name', name);
-	    // userRole = user.Role
+	    userRole = user.Role; $$invalidate('userRole', userRole);
 	    isVisitor = parseInt(user.Visitor); $$invalidate('isVisitor', isVisitor); // boolean sent as numeric string
 	  });
 
@@ -1407,7 +1447,7 @@ var App = (function () {
 		let $userStore;
 		$$self.$$.on_destroy.push(userStore.subscribe($$value => { $userStore = $$value; $$invalidate('$userStore', $userStore); }));
 
-		return { name, isVisitor, logout };
+		return { name, userRole, isVisitor, logout };
 	}
 
 	class Dashboard extends SvelteComponent {
@@ -2505,6 +2545,7 @@ var App = (function () {
 		
 
 	  let currPageComponent = Dashboard;
+	  let user = {};
 
 	  const pages = [
 	    {
@@ -2518,6 +2559,7 @@ var App = (function () {
 	    {
 	      path: '/admin-user-mngr',
 	      component: User_mngr,
+	      role: 'Admin',
 	    },
 	    {
 	      path: '/register',
@@ -2527,14 +2569,25 @@ var App = (function () {
 
 	  onMount(() => pageStore.set(location.pathname));
 
-	  const unsubscribe = pageStore.subscribe(path => {
+	  const unsubscribePage = pageStore.subscribe(path => {
 	    const matchingPage = pages.find(page => page.path === path);
-	    if (matchingPage) {
+	    if (!matchingPage) {
+	      changePage('/');
+	      return
+	    }
+	    const userAllowed = !matchingPage.role || matchingPage.role === user.Role;
+	    if (userAllowed) {
 	      currPageComponent = matchingPage.component; $$invalidate('currPageComponent', currPageComponent);
+	    } else {
+	      changePage('/');
 	    }
 	  });
 
-	  onDestroy(() => unsubscribe());
+	  const unsubscribeUser = userStore.subscribe(u => {
+	    user = u; $$invalidate('user', user);
+	  });
+
+	  onDestroy(() => unsubscribePage());
 
 		return { currPageComponent };
 	}

@@ -38,7 +38,7 @@
   import Link from './shared/link.html'
 
   let name = ''
-  let userRole = 'Admin'
+  let userRole = 'User'
   let isVisitor = false
 
   onMount(() => {
@@ -49,7 +49,7 @@
     }
 
     name = user.Firstname + ' ' + user.Lastname
-    // userRole = user.Role
+    userRole = user.Role
     isVisitor = parseInt(user.Visitor) // boolean sent as numeric string
   })
 
