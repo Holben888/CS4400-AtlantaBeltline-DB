@@ -1,0 +1,32 @@
+<h1>Transit History</h1>
+
+<Table
+  data="{tableData}"
+  sortEndpoint="/transit/history"
+  sortParams="{sortParams}"
+  setData="{setData}"
+  noSelect="{true}"
+  headers="{tableHeaders}"
+></Table>
+
+<script>
+  import Table from '../shared/table.html'
+  import fetch from '../fetch'
+  import { userStore } from '../store'
+  import { onMount } from 'svelte'
+
+  let tableData = []
+  const tableHeaders = ['Date', 'Route', 'Transport Type', 'Price']
+  let transitSelected = -1
+  let sortParams = {}
+
+  onMount(async () => {
+    sortParams = { username: $userStore.Username }
+    const response = await fetch('/transit/history', sortParams)
+    if (response && response.transits) tableData = response.transits
+  })
+
+  const setData = newData => {
+    if (newData.transits) tableData = newData.transits
+  }
+</script>

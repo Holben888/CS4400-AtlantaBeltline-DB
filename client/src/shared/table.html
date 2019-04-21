@@ -1,16 +1,16 @@
 <table id="email-table" class="border-table">
   <tr class="border-table">
-    {#each headers as header}
+    {#each headers as header, index}
     <th class="border-table">
       {header}
       <div class="sort-buttons">
         <div
           class="triangle-up"
-          on:click="{() => sortCallback(header, true)}"
+          on:click="{() => sortCallback(Object.keys(data[0])[index], true)}"
         ></div>
         <div
           class="triangle-down"
-          on:click="{() => sortCallback(header, false)}"
+          on:click="{() => sortCallback(Object.keys(data[0])[index], false)}"
         ></div>
       </div>
     </th>
@@ -18,7 +18,7 @@
   </tr>
   {#each data as row, index}
   <tr
-    class="{index === selected ? 'selected' : ''}"
+    class="{index === selected && !noSelect ? 'selected' : ''}"
     on:click="{() => selectItem(index)}"
   >
     {#each Object.values(row) as col, index}
@@ -77,16 +77,19 @@
   import fetch from '../fetch'
   import { afterUpdate } from 'svelte'
   export let sortEndpoint = ''
+  export let sortParams = {}
   export let setData = () => {}
   export let selectItem = () => {}
   export let selected = -1
   export let data = []
   export let headers = []
+  export let noSelect = false
 
   const sortCallback = async (header, sortAscending) => {
     const newData = await fetch(sortEndpoint, {
       orderBy: header,
       sort: sortAscending ? 'ASC' : 'DESC',
+      ...sortParams,
     })
     setData(newData || {})
   }

@@ -9,8 +9,8 @@
   headers="{tableHeaders}"
 ></Table>
 
-<form>
-  <input type="text" name="date" />
+<form id="logTransit" on:submit|preventDefault="{logTransit}">
+  <input type="date" name="date" />
   <button class="general-button" onclick="log()" style="margin-left: 20px;">
     Log Transit
   </button>
@@ -24,15 +24,20 @@
   let tableData = []
   const tableHeaders = ['Route', 'Type', 'Price', '# Connected Sites']
   let transitSelected = -1
+  let sortParams = {}
 
   onMount(async () => {
     const response = await fetch('/transit')
-    console.log(response)
     if (response && response.transits) tableData = response.transits
   })
 
   const setData = newData => {
     if (newData.transits) tableData = newData.transits
+  }
+
+  const logTransit = () => {
+    const date = document.forms['logTransit']['date'].value
+    //log transit
   }
 
   const selectTransit = item => (transitsSelected = item)

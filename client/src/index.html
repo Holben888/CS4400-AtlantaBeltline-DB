@@ -27,6 +27,7 @@
   import AdminUserMngr from './admin/user-mngr.html'
   import Register from './register.html'
   import TakeTransit from './transit/take.html'
+  import TransitHistory from './transit/history.html'
   import { pageStore, changePage, userStore } from './store'
 
   let currPageComponent = Dashboard
@@ -53,6 +54,10 @@
     {
       path: '/transit-take',
       component: TakeTransit,
+    },
+    {
+      path: '/transit-history',
+      component: TransitHistory,
     },
   ]
 
