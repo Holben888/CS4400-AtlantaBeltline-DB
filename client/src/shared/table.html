@@ -1,0 +1,91 @@
+<table id="email-table" class="border-table">
+  <tr class="border-table">
+    {#each data.length ? Object.keys(data[0]) : [] as header}
+    <th class="border-table">
+      {header}
+      <div class="sort-buttons">
+        <div
+          class="triangle-up"
+          on:click="{() => sortCallback(header, true)}"
+        ></div>
+        <div
+          class="triangle-down"
+          on:click="{() => sortCallback(header, false)}"
+        ></div>
+      </div>
+    </th>
+    {/each}
+  </tr>
+  {#each data as row, index}
+  <tr
+    class="{index === selected ? 'selected' : ''}"
+    on:click="{() => selectItem(index)}"
+  >
+    {#each Object.values(row) as col, index}
+    <td class="border-table">{col}</td>
+    {/each}
+  </tr>
+  {/each}
+</table>
+
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    cursor: pointer;
+  }
+  td,
+  tr {
+    border: 1px solid grey;
+    min-height: 3rem;
+  }
+  td {
+    padding: 1rem;
+  }
+
+  .selected {
+    background: cyan;
+  }
+
+  .sort-buttons {
+    float: right;
+    margin-left: 1rem;
+  }
+
+  .triangle-up {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid black;
+    margin-bottom: 3px;
+    cursor: pointer;
+  }
+
+  .triangle-down {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 10px solid black;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  import fetch from '../fetch'
+  import { afterUpdate } from 'svelte'
+  export let sortEndpoint = ''
+  export let setData = () => {}
+  export let selectItem = () => {}
+  export let selected = -1
+  export let data = []
+
+  const sortCallback = async (header, sortAscending) => {
+    const newData = await fetch(sortEndpoint, {
+      orderBy: header,
+      sort: sortAscending ? 'ASC' : 'DESC',
+    })
+    setData(newData || {})
+  }
+</script>

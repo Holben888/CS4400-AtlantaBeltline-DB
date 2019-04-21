@@ -6,7 +6,6 @@
   export let href = '/'
 
   const goToPage = () => {
-    console.log('something')
     pageStore.set(href)
     history.pushState({}, '', href)
   }

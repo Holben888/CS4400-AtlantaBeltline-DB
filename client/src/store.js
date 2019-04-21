@@ -1,7 +1,5 @@
 import { writable } from 'svelte/store'
 
-console.log(localStorage.getItem('user'))
-
 export const pageStore = writable('/')
 export const userStore = writable({
   Username: localStorage.getItem('Username'),

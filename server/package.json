@@ -4,7 +4,7 @@
   "description": "Phase 3 implementation for Atlanta Beltline project",
   "main": "app.js",
   "scripts": {
-    "dev": "npx nodemon --watch ./views --watch ./app.js app.js localhost 3001"
+    "dev": "npx nodemon --watch ./routes --watch ./app.js app.js localhost 3001"
   },
   "devDependencies": {
     "nodemon": "^1.18.11"

@@ -1,95 +1,88 @@
 <h1>Manage User</h1>
 
-<form name="myForm">
-  <table>
-    <tr>
-      <td>Username</td>
-      <td><input type="text" name="usernameText" /></td>
-      <td>Type</td>
-      <td>
-        <select name="type">
-          <option value="ALL">ALL</option>
-          <option value="User">User</option>
-          <option value="Visitor">Visitor</option>
-          <option value="Staff">Staff</option>
-          <option value="Manager">Manager</option>
-        </select>
-      </td>
-      <td>Status</td>
-      <td>
-        <select name="type">
-          <option value="ALL">ALL</option>
-          <option value="Approved">Approved</option>
-          <option value="Pending">Pending</option>
-          <option value="Declined">Declined</option>
-        </select>
-      </td>
-    </tr>
-  </table>
+<table>
+  <tr>
+    <td>Username</td>
+    <td><input type="text" name="usernameText" /></td>
+    <td>Type</td>
+    <td>
+      <select name="type">
+        <option value="ALL">ALL</option>
+        <option value="User">User</option>
+        <option value="Visitor">Visitor</option>
+        <option value="Staff">Staff</option>
+        <option value="Manager">Manager</option>
+      </select>
+    </td>
+    <td>Status</td>
+    <td>
+      <select name="type">
+        <option value="ALL">ALL</option>
+        <option value="Approved">Approved</option>
+        <option value="Pending">Pending</option>
+        <option value="Declined">Declined</option>
+      </select>
+    </td>
+  </tr>
+</table>
 
-  <button class="general-button" onclick="filter()" style="margin-left: 100px;">
-    Filter
-  </button>
-  <button
-    class="general-button"
-    onclick="approve()"
-    style="margin-left: 150px;"
-  >
-    Approve
-  </button>
-  <button class="general-button" onclick="decline()">Decline</button>
-  <br />
-  <br />
+<button class="general-button" onclick="filter()" style="margin-left: 100px;">
+  Filter
+</button>
+<button
+  class="general-button"
+  on:click="{() => changeUserStatus('Approved')}"
+  style="margin-left: 150px;"
+>
+  Approve
+</button>
+<button class="general-button" on:click="{() => changeUserStatus('Declined')}">
+  Decline
+</button>
+<br />
+<br />
+<Table
+  data="{tableData}"
+  sortEndpoint="/admin/userManager"
+  setData="{setData}"
+  selected="{userSelected}"
+  selectItem="{selectUser}"
+></Table>
 
-  <table id="email-table" class="border-table">
-    <tr class="border-table">
-      <th class="border-table">
-        Username
-        <div class="sort-buttons">
-          <div class="triangle-up" onclick="usernameUp()"></div>
-          <div class="triangle-down" onclick="usernameDown()"></div>
-        </div>
-      </th>
-      <th class="border-table">
-        Email Count
-        <div class="sort-buttons">
-          <div class="triangle-up" onclick="emailUp()"></div>
-          <div class="triangle-down" onclick="emailDown()"></div>
-        </div>
-      </th>
-      <th class="border-table">
-        User Type
-        <div class="sort-buttons">
-          <div class="triangle-up" onclick="typeUp()"></div>
-          <div class="triangle-down" onclick="typeDown()"></div>
-        </div>
-      </th>
-      <th class="border-table">
-        Status
-        <div class="sort-buttons">
-          <div class="triangle-up" onclick="statusUp()"></div>
-          <div class="triangle-down" onclick="statussDown()"></div>
-        </div>
-      </th>
-    </tr>
-    <!-- Example Data -->
-    <tr class="border-table">
-      <td class="border-table">
-        <input type="radio" name="route" value="cwilson" /> cwilson
-      </td>
-      <td class="border-table">3</td>
-      <td class="border-table">Manager</td>
-      <td class="border-table">Pending</td>
-    </tr>
-    <tr class="border-table">
-      <td class="border-table">
-        <input type="radio" name="route" value="jasonlee" /> jasonlee
-      </td>
-      <td class="border-table">1</td>
-      <td class="border-table">Manager</td>
-      <td class="border-table">Declined</td>
-    </tr>
-  </table>
+<button class="general-button" onclick="back()">Back</button>
 
-  <button class="general-button" onclick="back()">Back</button>
-</form>
+<script>
+  import Table from '../shared/table.html'
+  import { onMount } from 'svelte'
+  import fetch from '../fetch'
+  let tableData = []
+  let userSelected = -1
+
+  onMount(async () => {
+    const response = await fetch('/admin/userManager')
+    if (response && response.users) tableData = response.users
+  })
+
+  const setData = newData => {
+    if (newData.users) tableData = newData.users
+  }
+  const selectUser = item => (userSelected = item)
+
+  const changeUserStatus = async status => {
+    const user = tableData[userSelected]
+
+    if (user.status === 'Approved' || userSelected === -1) return
+
+    const response = await fetch(
+      '/admin/setUserStatus',
+      {
+        status: status,
+        username: user.username,
+      },
+      'POST'
+    )
+    if (!response.failed) {
+      tableData[userSelected].status = status
+    }
+  }
+</script>
