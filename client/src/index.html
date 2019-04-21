@@ -1,6 +1,9 @@
 <main>
   <div class="content-container">
     <svelte:component this="{currPageComponent}" />
+    {#if location.pathname !== '/'}
+      <Link href="/">Home</Link>
+    {/if}
   </div>
 </main>
 
@@ -19,9 +22,11 @@
 <script>
   import { onMount, onDestroy } from 'svelte'
   import Login from './login.html'
+  import Link from './shared/link.html'
   import Dashboard from './dashboard.html'
   import AdminUserMngr from './admin/user-mngr.html'
   import Register from './register.html'
+  import TakeTransit from './transit/take.html'
   import { pageStore, changePage, userStore } from './store'
 
   let currPageComponent = Dashboard
@@ -44,6 +49,10 @@
     {
       path: '/register',
       component: Register,
+    },
+    {
+      path: '/transit-take',
+      component: TakeTransit,
     },
   ]
 

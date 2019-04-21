@@ -32,7 +32,7 @@ router.get('/userManager', async (req, res, err) => {
   }
   `)
 
-  if (!users) res.sendStatus(404)
+  if (!users) res.sendStatus(400)
   else res.send({ users: users })
 })
 

@@ -47,9 +47,8 @@
   setData="{setData}"
   selected="{userSelected}"
   selectItem="{selectUser}"
+  headers="{tableHeaders}"
 ></Table>
-
-<Link href="/">Back</Link>
 
 <script>
   import Table from '../shared/table.html'
@@ -57,6 +56,7 @@
   import { onMount } from 'svelte'
   import fetch from '../fetch'
   let tableData = []
+  const tableHeaders = ['Username', 'Email Count', 'Status']
   let userSelected = -1
 
   onMount(async () => {

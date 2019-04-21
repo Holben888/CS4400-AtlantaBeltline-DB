@@ -1,6 +1,6 @@
 <table id="email-table" class="border-table">
   <tr class="border-table">
-    {#each data.length ? Object.keys(data[0]) : [] as header}
+    {#each headers as header}
     <th class="border-table">
       {header}
       <div class="sort-buttons">
@@ -81,6 +81,7 @@
   export let selectItem = () => {}
   export let selected = -1
   export let data = []
+  export let headers = []
 
   const sortCallback = async (header, sortAscending) => {
     const newData = await fetch(sortEndpoint, {

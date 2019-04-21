@@ -1,0 +1,39 @@
+<h1>Take a Transit</h1>
+
+<Table
+  data="{tableData}"
+  sortEndpoint="/transit"
+  setData="{setData}"
+  selected="{transitSelected}"
+  selectItem="{selectTransit}"
+  headers="{tableHeaders}"
+></Table>
+
+<form>
+  <input type="text" name="date" />
+  <button class="general-button" onclick="log()" style="margin-left: 20px;">
+    Log Transit
+  </button>
+</form>
+
+<script>
+  import Table from '../shared/table.html'
+  import fetch from '../fetch'
+  import { onMount } from 'svelte'
+
+  let tableData = []
+  const tableHeaders = ['Route', 'Type', 'Price', '# Connected Sites']
+  let transitSelected = -1
+
+  onMount(async () => {
+    const response = await fetch('/transit')
+    console.log(response)
+    if (response && response.transits) tableData = response.transits
+  })
+
+  const setData = newData => {
+    if (newData.transits) tableData = newData.transits
+  }
+
+  const selectTransit = item => (transitsSelected = item)
+</script>

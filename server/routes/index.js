@@ -3,8 +3,10 @@ const router = express.Router()
 const query = require('./connection')
 
 const admin = require('./admin')
+const transit = require('./transit')
 
 router.use('/admin', admin)
+router.use('/transit', transit)
 
 router.get('/login', async (req, res, err) => {
   if (!req.query.email || !req.query.password) {
