@@ -49,10 +49,11 @@
   selectItem="{selectUser}"
 ></Table>
 
-<button class="general-button" onclick="back()">Back</button>
+<Link href="/">Back</Link>
 
 <script>
   import Table from '../shared/table.html'
+  import Link from '../shared/link.html'
   import { onMount } from 'svelte'
   import fetch from '../fetch'
   let tableData = []

@@ -1,3 +1,18 @@
 html {
   font-family: sans-serif;
 }
+
+:root {
+  --primary: #009CDB;
+}
+
+button {
+  border: none;
+  background: var(--primary);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  color: white;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
