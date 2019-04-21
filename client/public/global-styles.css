@@ -4,6 +4,10 @@ html {
 
 :root {
   --primary: #009CDB;
+  --admin: #EA3F47;
+  --visitor: #00C968;
+  --manager: #D36838;
+  --staff: #00C9B7;
 }
 
 button {

@@ -32,15 +32,13 @@ router.get('/login', async (req, res, err) => {
     LIMIT 1`
   )
 
-  if (!employeeRoles || !employeeRoles.length) {
-    const visitorRecord = await query(`SELECT * FROM Visitor
-      WHERE username=\"${user.Username}\"`)
-    if (visitorRecord && visitorRecord.length) {
-      var role = 'Visitor'
-    } else {
-      var role = 'User'
-    }
-  } else {
+  const isVisitor = await query(
+    `SELECT * FROM Visitor
+      WHERE username=\"${user.Username}\"
+      LIMIT 1`
+  )
+
+  if (employeeRoles && employeeRoles.length) {
     if (employeeRoles[0].isAdmin) {
       var role = 'Admin'
     } else if (employeeRoles[0].isMngr) {
@@ -48,9 +46,16 @@ router.get('/login', async (req, res, err) => {
     } else {
       var role = 'Staff'
     }
+  } else {
+    var role = 'User'
   }
+  console.log(isVisitor)
 
-  res.send({ ...user, Role: role })
+  res.send({
+    ...user,
+    Role: role,
+    Visitor: isVisitor && isVisitor.length,
+  })
 })
 
 module.exports = router

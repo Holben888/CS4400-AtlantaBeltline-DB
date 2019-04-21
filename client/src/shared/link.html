@@ -1,8 +1,13 @@
-<a href="{href}" on:click|preventDefault="{goToPage}"><slot></slot> -></a>
+<a
+  href="{href}"
+  on:click|preventDefault="{goToPage}"
+  style="--color: var(--{type})"
+  ><slot></slot> 👉</a
+>
 
 <style>
   a {
-    background: var(--primary);
+    background: var(--color);
     font-weight: bold;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
@@ -10,6 +15,7 @@
     text-decoration: none;
     margin: 0.5rem 0;
     font-size: 0.8rem;
+    text-align: center;
   }
 </style>
 
@@ -17,6 +23,7 @@
   import { pageStore } from '../store'
 
   export let href = '/'
+  export let type = 'primary'
 
   const goToPage = () => {
     pageStore.set(href)

@@ -1,13 +1,45 @@
-<h1>Home!</h1>
-<p>{userRole}</p>
-<Link href="/admin-user-mngr">Manager Users</Link>
+<h1>{userRole} Dashboard</h1>
+<p>Hello {name}! <button on:click="{logout}">Logout</button></p>
+<div class="container">
+  <Link href="/transit-take">Take transit</Link>
+  <Link href="/transit-history">View transit history</Link>
+  {#if userRole !== 'User'}
+    <Link href="/manage-profile">Manage profile</Link>
+  {/if}
+  {#if userRole === 'Admin'}
+    <Link href="/admin-user-mngr" type="admin">Manage Users</Link>
+    <Link href="/admin-transit-mngr" type="admin">Manage Transit</Link>
+  {/if}
+  {#if userRole === 'Staff'}
+    <Link href="/staff-view-schedule" type="staff">View schedule</Link>
+  {/if}
+  {#if userRole === 'Manager'}
+    <Link href="/manager-event-mngr" type="manager">Manage Event</Link>
+    <Link href="/manager-view-staff" type="manager">View staff</Link>
+  {/if}
+  {#if isVisitor}
+    <Link href="/visitor-export-event" type="visitor">Explore event</Link>
+    <Link href="/visitor-export-site" type="visitor">Explort site</Link>
+    <Link href="/visitor-view-history" type="visitor">View visit history</Link>
+  {/if}
+</div>
+
+<style>
+  .container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 4rem;
+  }
+</style>
 
 <script>
   import { onMount } from 'svelte'
-  import { changePage, userStore } from './store'
+  import { changePage, userStore, clearUser } from './store'
   import Link from './shared/link.html'
 
-  let userRole = 'user'
+  let name = ''
+  let userRole = 'Admin'
+  let isVisitor = false
 
   onMount(() => {
     const user = $userStore
@@ -16,6 +48,13 @@
       changePage('/login')
     }
 
-    userRole = user.Role
+    name = user.Firstname + ' ' + user.Lastname
+    // userRole = user.Role
+    isVisitor = parseInt(user.Visitor) // boolean sent as numeric string
   })
+
+  const logout = () => {
+    clearUser()
+    changePage('/login')
+  }
 </script>
